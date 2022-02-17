@@ -51,7 +51,25 @@ http.createServer((request, response)=> {
             const renderData = template.render(data.toString(), {comments: comments});
             response.end(renderData);
         })
-   }
+    }else if(pathName === '/post'){
+        const absoluteUrl = path.join(__dirname, '../views/post.html');
+        fs.readFile(absoluteUrl, (err, data)=> {
+            if(err) return handleErrorPage();
+
+            response.end(data);
+        })
+
+    }else if(pathName === '/comment'){
+        const commentData = resUrlData.query;
+        commentData.time = new Date().toLocaleString();
+
+        comments = [commentData, ...comments];
+
+        response.statusCode = 302; // redirect url (post.html -> index.html)
+
+        response.setHeader('Location', '/');
+        response.end();
+    }
    
 }).listen(5000, ()=> {
     console.log("Sever is running....")

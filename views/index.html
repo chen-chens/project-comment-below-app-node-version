@@ -22,9 +22,8 @@
                 <section>
                     <h2 class="text-center mt-15">Comment Below</h2>
 
-                    <button type="button" class="btn btn-primary">
-                        我要留言
-                    </button>
+                    <!-- <a href="./post.html">我要留言</a> -->           <!-- To Browser: access data by folder  -->
+                    <a class="btn btn-primary" href="/post">我要留言</a>  <!-- To server: href transfer to url, response by parsed url -->
 
                     <ul class="list-group list-group-flush">
                         {{each comments}}
@@ -33,7 +32,6 @@
                             <span>{{$value.content}}</span>
                             <small>{{$value.time}}</small>
                         </li>
-            
                         {{/each}}
                     </ul>
                 </section>

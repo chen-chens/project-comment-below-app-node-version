@@ -14,14 +14,14 @@
         <div class="row">
             <div class="col-12">
 
-                <form>
+                <form action="/comment" method="GET"> <!-- Define form sending request to server when user clicks submit button-->
                     <div class="mb-3">
-                    <label for="name" class="form-label">姓名</label>
-                    <input type="text" class="form-control" id="name">
+                        <label for="name" class="form-label">姓名</label>
+                        <input type="text" class="form-control" id="name" name="name" required minlength="2" maxlength="10"> <!-- attr. name as form value -->
                     </div>
                     <div class="mb-3">
-                    <label for="comment" class="form-label">想說寫什麼...</label>
-                    <textarea class="form-control" aria-label="With textarea" id="comment"></textarea>
+                        <label for="comment" class="form-label">想說寫什麼...</label>
+                        <textarea class="form-control" aria-label="With textarea" id="comment" name="content" required minlength="2" maxlength="10"></textarea>
                     </div>
 
                     <button type="submit" class="btn btn-primary">Submit</button>
