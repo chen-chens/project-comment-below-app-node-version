@@ -1,42 +1,58 @@
 const http = require("http");
 const url = require("url");
 const fs = require("fs");
+const path = require('path');
+const template = require("art-template");
+
+
+let comments = [
+    {
+        name: "Joanna",
+        content: "飛向宇宙～",
+        time: "2022-2-16 20:20:00" 
+    },
+    {
+        name: "David",
+        content: "浩瀚無敵～",
+        time: "2022-2-17 21:45:00" 
+    },
+];
+
 
 
 http.createServer((request, response)=> {
-    console.log("response.url; ", response.url)
-    const resUrlData = url.parse(response.url, true);
+    /* 
+        (1) 解析路徑，讀取對應資料 / template.render(source, data, options);
+        (2) 如果 讀取對應資料 失敗，要怎麼處理: return 404 page
+        (3) 結束
+    */
+    const resUrlData = url.parse(request.url, true);
     const pathName = resUrlData.pathname;
 
     // handle 404 page:
     function handleErrorPage(){
-        fs.readFile("../views/404.html", (err, data) => {
+        fs.readFile("./views/404.html", (err, data) => {
             if(err) return response.end("404 NOT FOUND!");
 
-            res.end(data.toString());
+            response.end(data.toString());
         })
     }
-
-    // handle static page:
-    /* 
-        (1) 解析路徑，讀取對應資料
-        (2) 如果 讀取對應資料 失敗，要怎麼處理: return 404 page
-        (3) 結束
-
-    */
-   if(pathName.includes("/public/")){     // handle frontEnd page
-        fs.readFile(`../public/${pathName}.html`, (err, data)=> {
+    if(pathName.indexOf('/public') === 0){ // controller: handle public folder path 
+        fs.readFile(`./${pathName}`, (err, data)=> {
             if(err) return handleErrorPage();
-
-            res.end(data.toString());
+ 
+             response.end(data.toString());
         })
-   }else if(pathName === "/"){            // handle BackEnd page
-        fs.readFile('../views/index.html', (err, data)=> {
+    }else if(pathName === '/'){ // handle view page
+        const absoluteUrl = path.join(__dirname, '../views/index.html');
+        fs.readFile(absoluteUrl, (err, data)=> {
             if(err) return handleErrorPage();
-
-            res.end(data.toString());
+            
+            const renderData = template.render(data.toString(), {comments: comments});
+            response.end(renderData);
         })
    }
-
-
+   
+}).listen(5000, ()=> {
+    console.log("Sever is running....")
 })
